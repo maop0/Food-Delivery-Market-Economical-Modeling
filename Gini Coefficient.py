@@ -1,6 +1,12 @@
 import numpy as np
 
-income = np.array([3333, 5555, 5000, 8888, 9999], dtype=float)
+income = np.genfromtxt(
+    r"Data/income.csv",
+    dtype=float,
+    delimiter=",",
+    encoding="utf-8-sig"
+)
+income = income[~np.isnan(income)]
 income_sorted = np.sort(income)
 n = len(income_sorted)
 total_income = income_sorted.sum()
