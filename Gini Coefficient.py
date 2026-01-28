@@ -1,16 +1,25 @@
 import numpy as np
 
-income = np.genfromtxt(
-    r"Data/income.csv",
-    dtype=float,
-    delimiter=",",
-    encoding="utf-8-sig"
-)
-income = income[~np.isnan(income)]
-income_sorted = np.sort(income)
-n = len(income_sorted)
-total_income = income_sorted.sum()
-i = np.arange(1, n + 1)
-gini = (2 * np.sum(i * income_sorted)) / (n * total_income) - (n + 1) / n
+def gini_coefficient(source) -> float:
+    if isinstance(source, (str, bytes, bytearray, np.str_)):
+        values = np.genfromtxt(
+            source,
+            dtype=float,
+            delimiter=",",
+            encoding="utf-8-sig"
+        )
+    else:
+        values = np.array(source, dtype=float)
 
-print("Gini coefficient:", round(gini, 3))
+    values = values[~np.isnan(values)]
+    values = np.sort(values)
+    n = len(values)
+    total = values.sum()
+    if n == 0 or total == 0:
+        return np.nan
+    i = np.arange(1, n + 1)
+    return (2 * np.sum(i * values)) / (n * total) - (n + 1) / n
+
+if __name__ == "__main__":
+    gini = gini_coefficient(r"Data/income.csv")
+    print("Gini coefficient:", round(gini, 3))
